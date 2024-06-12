@@ -6,7 +6,7 @@ WORKDIR /app
 
 # 复制 requirements.txt 并安装依赖
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host mirrors.cloud.aliyuncs.com --default-timeout=60 --no-cache-dir -r requirements.txt
 
 # 复制应用代码到容器中
 COPY . /app/

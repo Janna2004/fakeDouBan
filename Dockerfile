@@ -11,8 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 复制应用代码到容器中
 COPY . /app/
 
-# 复制配置文件示例到真实配置文件
-RUN cp config-example.json config.json
 
 # 复制和映射数据文件夹
 VOLUME ["/app/data"]

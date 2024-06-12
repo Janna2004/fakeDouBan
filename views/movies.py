@@ -1,5 +1,3 @@
-import json
-from utils.db import Database
 from utils.http_code import HTTPResponseHandler
 
 

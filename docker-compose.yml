@@ -13,12 +13,13 @@ services:
       - /home/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - /home/nginx/conf/certs:/etc/nginx/conf/certs
       - /home/nginx/conf/conf.d:/etc/nginx/conf.d
+      - /home/acs/jjy/fakeDouBan/data:/usr/share/nginx/html/douban/data:ro
     networks:
       - douban-net
     depends_on:
       - douban-server
 
-  postgres:
+  pg:
     image: postgres:latest
     container_name: pg
     networks:
@@ -43,7 +44,7 @@ services:
     networks:
       - douban-net
     depends_on:
-      - postgres
+      - pg
     environment:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432

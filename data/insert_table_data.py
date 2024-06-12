@@ -15,16 +15,14 @@ def create_table(cursor, column_names):
     except Exception as e:
         print(f"Error creating table: {e}")
 
-
 def insert_data(cursor, data):
     try:
         for row in data:
-            print(f"Inserting data: {row}")  # 添加这一行来调试
-            cursor.execute("INSERT INTO movies VALUES (DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", row)
-        print("All data inserted successfully!")  # 添加这一行来调试
+            print(f"Inserting data: {row}")  # 用于调试的打印语句
+            cursor.execute("INSERT INTO movies VALUES (DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", row)
+        print("All data inserted successfully!")  # 用于调试的打印语句
     except Exception as e:
         print(f"Error inserting data: {e}")
-
 
 if __name__ == "__main__":
     config = load_config('../config.json')
@@ -42,10 +40,16 @@ if __name__ == "__main__":
     wb = load_workbook(filename='data_movie.xlsx')
     ws = wb.active
     column_names = [cell.value for cell in ws[1]]
-    data = [[cell.value for cell in row] for row in ws.iter_rows(min_row=2)]
+    data = []
+    for row in ws.iter_rows(min_row=2):
+        row_data = [cell.value for cell in row]
+        movie_name = row_data[column_names.index('movie_name')]
+        cover_url = f"/img/cover/{movie_name.split(' ')[0]}.jpg"
+        row_data.append(cover_url)  # 在每一行数据中加入 coverUrl
+        data.append(row_data)
 
     # 创建表格并插入数据
-    create_table(cursor, column_names)
+    create_table(cursor, column_names + ['coverUrl'])  # 添加 coverUrl 列
     insert_data(cursor, data)
 
     # 提交并关闭连接

@@ -37,11 +37,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if method == 'GET':
             try:
                 if path_components[0] == "list" and len(path_components) == 2:
-                    try:
-                        page = int(path_components[1])
-                        views.movies.Movies(self.db).list_movies(self, page)
-                    except ValueError:
-                        http_code.HTTPResponseHandler(self).parse_error()
+                    page = int(path_components[1])
+                    self.movies.list_movies(page)
                 else:
                     http_code.HTTPResponseHandler(self).not_found()
             except json.JSONDecodeError:

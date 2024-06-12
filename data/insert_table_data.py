@@ -19,7 +19,9 @@ def create_table(cursor, column_names):
 def insert_data(cursor, data):
     try:
         for row in data:
-            cursor.execute("INSERT INTO movies VALUES (DEFAULT, %s, %s, %s, %s, %s)", row)
+            print(f"Inserting data: {row}")  # 添加这一行来调试
+            cursor.execute("INSERT INTO movies VALUES (DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", row)
+        print("All data inserted successfully!")  # 添加这一行来调试
     except Exception as e:
         print(f"Error inserting data: {e}")
 

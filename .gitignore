@@ -163,5 +163,5 @@ cython_debug/
 config.json
 
 # 数据文件
-#data/data_movie.xlsx
-#data/img/
+# data/data_movie.xlsx
+# data/img/

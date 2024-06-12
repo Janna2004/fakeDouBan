@@ -30,15 +30,31 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         self.handle_request('POST')
 
+    def do_DELETE(self):
+        self.handle_request('DELETE')
+
+    def do_PUT(self):
+        self.handle_request('PUT')
+
     def handle_request(self, method):
         parsed_path = urllib.parse.urlparse(self.path)
         path_components = parsed_path.path.strip('/').split('/')
+        # 使用urllib解析查询参数，得到一个字典
+        query_params = urllib.parse.parse_qs(parsed_path.query)
 
         if method == 'GET':
             try:
                 if path_components[0] == "list" and len(path_components) == 2:
                     page = int(path_components[1])
                     self.movies.list_movies(page)
+                elif path_components[0] == "movie" and len(path_components) == 2:
+                    if path_components[1] == "search":
+                        self.movies.search_movies(query_params)
+                elif path_components[0] == "user" and len(path_components) == 2:
+                    if path_components[1] == "info":
+                        self.users.user_info(query_params)
+                    elif path_components[1] == "all":
+                        self.users.all_user()
                 else:
                     http_code.HTTPResponseHandler(self).not_found()
             except json.JSONDecodeError:
@@ -54,9 +70,30 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                         self.users.login(data)
                     elif path_components[1] == "signup":
                         self.users.signup(data)
+                    elif path_components[1] == "modify":
+                        if path_components[2] == "name":
+                            self.users.modify_name(data)
+                        elif path_components[2] == "pwd":
+                            self.users.modify_pwd(data)
                 else:
                     http_code.HTTPResponseHandler(self).not_found()
             except json.JSONDecodeError:
+                http_code.HTTPResponseHandler(self).server_error()
+
+        elif method == 'DELETE':
+            try:
+                if path_components[0] == "user" and len(path_components) == 2:
+                    if path_components[1] == "delete":
+                        self.users.delete_user(query_params)
+            except:
+                http_code.HTTPResponseHandler(self).server_error()
+
+        elif method == 'PUT':
+            try:
+                if path_components[0] == "user" and len(path_components) == 2:
+                    if path_components[1] == "admin":
+                        self.users.add_admin(query_params)
+            except:
                 http_code.HTTPResponseHandler(self).server_error()
 
 

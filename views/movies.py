@@ -1,10 +1,12 @@
 from utils.http_code import HTTPResponseHandler
+import threading
 
 
 class Movies:
     def __init__(self, db, handler):
         self.db = db
         self.response_handler = HTTPResponseHandler(handler)
+        self.lock = threading.Lock()
 
     def list_movies(self, page):
         items_per_page = 12
